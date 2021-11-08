@@ -67,7 +67,6 @@ import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity.ERROR
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity.STRONG_WARNING
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.common.toBooleanLenient
-import org.jetbrains.kotlin.cli.jvm.JvmRuntimeVersionsConsistencyChecker
 import org.jetbrains.kotlin.cli.jvm.compiler.jarfs.FastJarFileSystem
 import org.jetbrains.kotlin.cli.jvm.config.*
 import org.jetbrains.kotlin.cli.jvm.index.*
@@ -240,6 +239,7 @@ class KotlinCoreEnvironment private constructor(
 
         val jdkHome = configuration.get(JVMConfigurationKeys.JDK_HOME)
         val jrtFileSystem = VirtualFileManager.getInstance().getFileSystem(StandardFileSystems.JRT_PROTOCOL)
+        val releaseTarget = configuration.get(JVMConfigurationKeys.RELEASE, 0)
         val javaModuleFinder = CliJavaModuleFinder(
             jdkHome?.path?.let { path ->
                 VirtualFileManager.getInstance().getFileSystem(StandardFileSystems.FILE_PROTOCOL).findFileByPath(path)
@@ -248,7 +248,8 @@ class KotlinCoreEnvironment private constructor(
                 jrtFileSystem?.findFileByPath(path + URLUtil.JAR_SEPARATOR)
             },
             javaFileManager,
-            project
+            project,
+            releaseTarget
         )
 
         val outputDirectory =
@@ -264,7 +265,7 @@ class KotlinCoreEnvironment private constructor(
             !configuration.getBoolean(CLIConfigurationKeys.ALLOW_KOTLIN_PACKAGE),
             outputDirectory?.let(this::findLocalFile),
             javaFileManager,
-            configuration.get(JVMConfigurationKeys.RELEASE, 0)
+            releaseTarget
         )
 
         val (initialRoots, javaModules) =
