@@ -172,14 +172,14 @@ class TowerResolver {
                     scope.mayFitForName(name)
                 )
 
-            val parentScopes = lexicalScope.parentsWithSelf.toList()
-
             if (!areContextReceiversEnabled) {
-                parentScopes.forEach { scope ->
+                lexicalScope.parentsWithSelf.forEach { scope ->
                     if (scope is LexicalScope) addLevelForLexicalScope(scope) else addLevelForImportingScope(scope)
                 }
                 return mainResult
             }
+
+            val parentScopes = lexicalScope.parentsWithSelf.toList()
 
             val contextReceiversGroups = mutableListOf<List<ReceiverValueWithSmartCastInfo>>()
             var firstImportingScopeIndex = 0
