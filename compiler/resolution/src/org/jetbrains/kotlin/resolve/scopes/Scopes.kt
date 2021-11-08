@@ -36,7 +36,6 @@ interface LexicalScope : HierarchicalScope {
     val ownerDescriptor: DeclarationDescriptor
     val isOwnerDescriptorAccessibleByLabel: Boolean
 
-    // TODO Change to implicitReceiver
     val implicitReceiver: ReceiverParameterDescriptor?
     val contextReceiversGroup: List<ReceiverParameterDescriptor>
 
