@@ -199,6 +199,9 @@ class FirTypeResolverImpl(private val session: FirSession) : FirTypeResolver() {
         topDeclaration: FirRegularClass?,
         isOperandOfIsOperator: Boolean
     ): ConeKotlinType {
+        if (symbol is FirErrorClassLikeSymbol) {
+            return ConeKotlinErrorType(symbol.diagnostic)
+        }
         if (symbol == null || symbol !is FirClassifierSymbol<*>) {
             val diagnostic = if (symbol?.fir is FirEnumEntry) {
                 if (isOperandOfIsOperator) {
