@@ -176,13 +176,13 @@ fun List<ExportedDeclaration>.withMagicProperty(): List<ExportedDeclaration> {
         ExportedProperty(
             "__doNotUseIt",
             ExportedType.TypeParameter("__doNotImplementIt"),
-            false,
-            true,
-            false,
-            false,
-            false,
-            null,
-            null
+            mutable = false,
+            isMember = true,
+            isStatic = false,
+            isAbstract = false,
+            isProtected = false,
+            irGetter = null,
+            irSetter = null
         )
     )
 }

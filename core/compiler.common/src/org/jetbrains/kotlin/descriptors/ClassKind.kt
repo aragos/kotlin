@@ -33,5 +33,5 @@ inline val ClassKind.isInterface: Boolean
 inline val ClassKind.isEnumClass: Boolean
     get() = this == ClassKind.ENUM_CLASS
 
-inline val ClassKind.isRawClass: Boolean
+inline val ClassKind.isClass: Boolean
     get() = this == ClassKind.CLASS

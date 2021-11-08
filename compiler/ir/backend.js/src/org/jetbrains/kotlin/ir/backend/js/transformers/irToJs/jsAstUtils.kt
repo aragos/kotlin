@@ -143,8 +143,8 @@ fun translateCall(
     val jsExtensionReceiver = expression.extensionReceiver?.accept(transformer, context)
     val arguments = translateCallArguments(expression, context, transformer)
 
-    // Transform external property accessor call
-    // @JsName-annotated external property accessors are translated as function calls
+    // Transform external and interface's property accessor call
+    // @JsName-annotated external and interface's property accessors are translated as function calls
     if (function.getJsName() == null) {
         val property = function.correspondingPropertySymbol?.owner
         if (
