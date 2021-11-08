@@ -157,10 +157,9 @@ fun ExportedDeclaration.toTypeScript(indent: String, prefix: String = ""): Strin
 }
 
 fun ExportedType.toExtendsClause(indent: String): String {
-    return if (this is ExportedType.ImplicitlyExportedType) {
-        " /* extends ${type.toTypeScript(indent)} */"
-    } else {
-        " extends ${toTypeScript(indent)}"
+    return when (this) {
+        is ExportedType.ImplicitlyExportedType -> " /* ${type.toExtendsClause(indent)} */"
+        else -> " extends ${toTypeScript(indent)}"
     }
 }
 
