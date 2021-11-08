@@ -25705,6 +25705,12 @@ public class FirOldFrontendDiagnosticsWithLightTreeTestGenerated extends Abstrac
                 }
 
                 @Test
+                @TestMetadata("companionNestedVsOuter.kt")
+                public void testCompanionNestedVsOuter() throws Exception {
+                    runTest("compiler/testData/diagnostics/tests/scopes/classHeader/companionNestedVsOuter.kt");
+                }
+
+                @Test
                 @TestMetadata("companionObjectParents.kt")
                 public void testCompanionObjectParents() throws Exception {
                     runTest("compiler/testData/diagnostics/tests/scopes/classHeader/companionObjectParents.kt");
