@@ -681,8 +681,7 @@ internal object CheckReceivers : ResolutionPart() {
             )
             1 -> {
                 if (resolvedCall.extensionReceiverArgument == null) {
-                    val applicableExtensionReceiverCandidate = chooseExtensionReceiverCandidate() ?: return
-                    resolvedCall.extensionReceiverArgument = applicableExtensionReceiverCandidate
+                    resolvedCall.extensionReceiverArgument = chooseExtensionReceiverCandidate() ?: return
                 }
                 checkReceiver(
                     resolvedCall.extensionReceiverArgument,
