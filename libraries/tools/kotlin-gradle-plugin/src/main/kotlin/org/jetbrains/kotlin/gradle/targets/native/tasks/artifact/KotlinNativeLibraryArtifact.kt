@@ -63,11 +63,6 @@ class KotlinNativeLibraryConfig {
         exportDeps.addAll(project)
     }
 
-    internal var languageSettingsFn: LanguageSettingsBuilder.() -> Unit = {}
-    fun languageSettings(fn: LanguageSettingsBuilder.() -> Unit) {
-        languageSettingsFn = fn
-    }
-
     internal var kotlinOptionsFn: KotlinCommonToolOptions.() -> Unit = {}
     fun kotlinOptions(fn: KotlinCommonToolOptions.() -> Unit) {
         kotlinOptionsFn = fn

@@ -78,7 +78,6 @@ internal fun buildKotlinNativeBinaryLinkerArgs(
     outputKind: CompilerOutputKind,
     libraries: List<File>,
 
-    languageSettings: LanguageSettings,
     enableEndorsedLibs: Boolean,
     kotlinOptions: KotlinCommonToolOptions,
     compilerPlugins: List<CompilerPluginData>,
@@ -107,7 +106,7 @@ internal fun buildKotlinNativeBinaryLinkerArgs(
     binaryOptions.forEach { (name, value) -> add("-Xbinary=$name=$value") }
     addKey("-Xstatic-framework", isStaticFramework)
 
-    addAll(buildKotlinNativeCommonArgs(languageSettings, enableEndorsedLibs, kotlinOptions, compilerPlugins))
+    addAll(buildKotlinNativeCommonArgs(null, enableEndorsedLibs, kotlinOptions, compilerPlugins))
 
     exportLibraries.forEach { add("-Xexport-library=${it.absolutePath}") }
     includeLibraries.forEach { add("-Xinclude=${it.absolutePath}") }
@@ -131,7 +130,7 @@ private fun buildKotlinNativeMainArgs(
 }
 
 internal fun buildKotlinNativeCommonArgs(
-    languageSettings: LanguageSettings,
+    languageSettings: LanguageSettings?, //null for linking
     enableEndorsedLibs: Boolean,
     kotlinOptions: KotlinCommonToolOptions,
     compilerPlugins: List<CompilerPluginData>
@@ -144,7 +143,7 @@ internal fun buildKotlinNativeCommonArgs(
         addArgs("-P", plugin.options.arguments)
     }
 
-    with(languageSettings) {
+    languageSettings?.run {
         addArgIfNotNull("-language-version", languageVersion)
         addArgIfNotNull("-api-version", apiVersion)
         addKey("-progressive", progressiveMode)

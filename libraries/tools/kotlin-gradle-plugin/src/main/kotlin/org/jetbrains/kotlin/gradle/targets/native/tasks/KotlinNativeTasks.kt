@@ -634,7 +634,6 @@ constructor(
             konanTarget,
             outputKind,
             libraries.files.filterKlibsPassedToCompiler(),
-            languageSettings,
             enableEndorsedLibs,
             localKotlinOptions,
             plugins,

@@ -73,40 +73,6 @@ open class KotlinNativeLinkArtifactTask @Inject constructor(
     var embedBitcode: BitcodeEmbeddingMode = BitcodeEmbeddingMode.DISABLE
 
     @get:Internal
-    val languageSettings: LanguageSettingsBuilder = DefaultLanguageSettingsBuilder(project)
-
-    fun languageSettings(fn: LanguageSettingsBuilder.() -> Unit) {
-        languageSettings.fn()
-    }
-
-    fun languageSettings(fn: Closure<*>) {
-        fn.delegate = languageSettings
-        fn.call()
-    }
-
-    @get:Optional
-    @get:Input
-    val languageVersion: String?
-        get() = languageSettings.languageVersion
-
-    @get:Optional
-    @get:Input
-    val apiVersion: String?
-        get() = languageSettings.apiVersion
-
-    @get:Input
-    val progressiveMode: Boolean
-        get() = languageSettings.progressiveMode
-
-    @get:Input
-    val enabledLanguageFeatures: Set<String>
-        get() = languageSettings.enabledLanguageFeatures
-
-    @get:Input
-    val optInAnnotationsInUse: Set<String>
-        get() = languageSettings.optInAnnotationsInUse
-
-    @get:Internal
     var librariesConfiguration: String? = null
 
     @get:Classpath
@@ -189,14 +155,6 @@ open class KotlinNativeLinkArtifactTask @Inject constructor(
 
         fun FileCollection.klibs() = files.filter { it.extension == "klib" }
 
-        val localKotlinOptions = object : KotlinCommonToolOptions {
-            override var allWarningsAsErrors = kotlinOptions.allWarningsAsErrors
-            override var suppressWarnings = kotlinOptions.suppressWarnings
-            override var verbose = kotlinOptions.verbose
-            override var freeCompilerArgs = kotlinOptions.freeCompilerArgs +
-                    ((languageSettings as? DefaultLanguageSettingsBuilder)?.freeCompilerArgs ?: emptyList())
-        }
-
         val localBinaryOptions = PropertiesProvider(project).nativeBinaryOptions + binaryOptions
 
         val buildArgs = buildKotlinNativeBinaryLinkerArgs(
@@ -206,9 +164,8 @@ open class KotlinNativeLinkArtifactTask @Inject constructor(
             konanTarget,
             outputKind,
             libraries.klibs(),
-            languageSettings,
             enableEndorsedLibs,
-            localKotlinOptions,
+            kotlinOptions,
             emptyList(),//todo CompilerPlugins
             processTests,
             entryPoint,

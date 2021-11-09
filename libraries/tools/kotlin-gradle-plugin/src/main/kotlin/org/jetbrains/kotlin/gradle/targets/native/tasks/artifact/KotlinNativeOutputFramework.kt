@@ -203,7 +203,6 @@ private fun Project.registerLinkFrameworkTask(
         task.librariesConfiguration = librariesConfigurationName
         task.exportLibrariesConfiguration = exportConfigurationName
 
-        task.languageSettings(config.languageSettingsFn)
         task.kotlinOptions(config.kotlinOptionsFn)
     }
 }
