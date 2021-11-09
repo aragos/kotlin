@@ -24,12 +24,10 @@ import org.jetbrains.kotlin.fir.resolve.diagnostics.ConeTypeParameterSupertype
 import org.jetbrains.kotlin.fir.resolve.providers.firProvider
 import org.jetbrains.kotlin.fir.resolve.providers.symbolProvider
 import org.jetbrains.kotlin.fir.resolve.transformers.body.resolve.LocalClassesNavigationInfo
-import org.jetbrains.kotlin.fir.scopes.FirCompositeScope
 import org.jetbrains.kotlin.fir.scopes.FirScope
 import org.jetbrains.kotlin.fir.scopes.createImportingScopes
 import org.jetbrains.kotlin.fir.scopes.getNestedClassifierScope
 import org.jetbrains.kotlin.fir.scopes.impl.FirMemberTypeParameterScope
-import org.jetbrains.kotlin.fir.scopes.impl.FirNestedClassifierScope
 import org.jetbrains.kotlin.fir.scopes.impl.nestedClassifierScope
 import org.jetbrains.kotlin.fir.scopes.impl.wrapNestedClassifierScopeWithSubstitutionForSuperType
 import org.jetbrains.kotlin.fir.symbols.impl.FirClassLikeSymbol
@@ -44,6 +42,7 @@ import org.jetbrains.kotlin.fir.visitors.FirTransformer
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.types.model.TypeArgumentMarker
 import org.jetbrains.kotlin.utils.addIfNotNull
+import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 class FirSupertypeResolverProcessor(session: FirSession, scopeSession: ScopeSession) :
     FirTransformerBasedResolveProcessor(session, scopeSession) {
@@ -174,15 +173,18 @@ private fun createOtherScopesForNestedClasses(
     klass: FirClass,
     session: FirSession,
     scopeSession: ScopeSession,
-    supertypeComputationSession: SupertypeComputationSession
+    supertypeComputationSession: SupertypeComputationSession,
+    withCompanionScopes: Boolean,
 ): Collection<FirScope> =
     mutableListOf<FirScope>().apply {
         // Note: from higher priority to lower priority
         // See also: BodyResolveContext.withScopesForClass
         addIfNotNull(session.nestedClassifierScope(klass))
-        val companionObjects = klass.declarations.filterIsInstance<FirRegularClass>().filter { it.isCompanion }
-        for (companionObject in companionObjects) {
-            addIfNotNull(session.nestedClassifierScope(companionObject))
+        if (withCompanionScopes) {
+            val companionObjects = klass.declarations.filterIsInstance<FirRegularClass>().filter { it.isCompanion }
+            for (companionObject in companionObjects) {
+                addIfNotNull(session.nestedClassifierScope(companionObject))
+            }
         }
         lookupSuperTypes(
             klass,
@@ -239,12 +241,18 @@ open class FirSupertypeResolverVisitor(
         }
     }
 
-    private fun prepareScopeForNestedClasses(klass: FirClass): ScopePersistentList {
-        return supertypeComputationSession.getOrPutScopeForNestedClasses(klass) {
-            val scopes = prepareScopes(klass)
-
+    private fun prepareScopeForNestedClasses(klass: FirClass, isCompanion: Boolean = false): ScopePersistentList {
+        val calculateScopes = {
             resolveAllSupertypes(klass, klass.superTypeRefs)
-            scopes.pushAll(createOtherScopesForNestedClasses(klass, session, scopeSession, supertypeComputationSession))
+            prepareScopes(klass).pushAll(
+                createOtherScopesForNestedClasses(klass, session, scopeSession, supertypeComputationSession, !isCompanion)
+            )
+        }
+
+        return if (isCompanion) {
+            calculateScopes()
+        } else {
+            supertypeComputationSession.getOrPutScopeForNestedClasses(klass, calculateScopes)
         }
     }
 
@@ -288,29 +296,13 @@ open class FirSupertypeResolverVisitor(
             }
             classId.isNestedClass -> {
                 val outerClassFir = classId.outerClassId?.let(::getFirClassifierByFqName) as? FirRegularClass
-                val scopes = prepareScopeForNestedClasses(outerClassFir ?: return persistentListOf())
-
-                if (classLikeDeclaration is FirRegularClass && classLikeDeclaration.isCompanion) {
-                    scopes.lowerCompanionScopePriority(classLikeDeclaration)
-                } else {
-                    scopes
-                }
+                val isCompanion = classLikeDeclaration.safeAs<FirRegularClass>()?.isCompanion == true
+                prepareScopeForNestedClasses(outerClassFir ?: return persistentListOf(), isCompanion)
             }
             else -> getFirClassifierContainerFileIfAny(classLikeDeclaration.symbol)?.let(::prepareFileScopes) ?: persistentListOf()
         }
 
         return result.pushIfNotNull(classLikeDeclaration.typeParametersScope())
-    }
-
-    private fun PersistentList<FirScope>.lowerCompanionScopePriority(companion: FirRegularClass): PersistentList<FirScope> {
-        val index = indexOfFirst { it is FirNestedClassifierScope && it.klass == companion }
-
-        if (index == -1) {
-            return this
-        }
-
-        val companionScope = this[index]
-        return this.removeAt(index).add(companionScope)
     }
 
     private fun resolveSpecificClassLikeSupertypes(
