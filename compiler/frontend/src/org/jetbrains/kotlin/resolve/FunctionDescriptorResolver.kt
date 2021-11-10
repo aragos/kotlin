@@ -16,6 +16,7 @@
 
 package org.jetbrains.kotlin.resolve
 
+import com.google.common.collect.HashMultimap
 import com.intellij.openapi.util.ThrowableComputable
 import com.intellij.psi.PsiElement
 import com.intellij.util.AstLoadingFilter
@@ -242,20 +243,20 @@ class FunctionDescriptorResolver(
         }
 
         if (languageVersionSettings.supportsFeature(LanguageFeature.ContextReceivers)) {
-            val labelNameToReceiverStorage = LabelNameToReceiverStorage()
+            val labelNameToReceiverMap = HashMultimap.create<String, ReceiverParameterDescriptor>()
             if (receiverTypeRef != null && extensionReceiver != null) {
                 receiverTypeRef.nameForReceiverLabel()?.let {
-                    labelNameToReceiverStorage[it] = extensionReceiver
+                    labelNameToReceiverMap.put(it, extensionReceiver)
                 }
             }
             contextReceiverDescriptors.zip(0 until contextReceivers.size).reversed()
                 .forEach { (contextReceiverDescriptor, i) ->
                     contextReceivers[i].name()?.let {
-                        labelNameToReceiverStorage[it] = contextReceiverDescriptor
+                        labelNameToReceiverMap.put(it, contextReceiverDescriptor)
                     }
                 }
 
-            trace.record(BindingContext.DESCRIPTOR_TO_NAMED_RECEIVERS, functionDescriptor, labelNameToReceiverStorage)
+            trace.record(BindingContext.DESCRIPTOR_TO_NAMED_RECEIVERS, functionDescriptor, labelNameToReceiverMap)
         }
 
         functionDescriptor.initialize(
