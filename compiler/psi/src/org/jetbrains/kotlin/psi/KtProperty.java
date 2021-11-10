@@ -121,25 +121,8 @@ public class KtProperty extends KtTypeParameterListOwnerStub<KotlinPropertyStub>
         if (contextReceiverList != null) {
             return contextReceiverList.contextReceivers();
         } else {
-            return getContextReceiverTypeRefsByTree();
+            return Collections.emptyList();
         }
-    }
-
-    @NotNull
-    private List<KtContextReceiver> getContextReceiverTypeRefsByTree() {
-        ASTNode node = getNode().getFirstChildNode();
-        while (node != null) {
-            IElementType tt = node.getElementType();
-            if (tt == KtTokens.COLON) {
-                break;
-            }
-            if (tt == KtNodeTypes.CONTEXT_RECEIVER_LIST) {
-                KtContextReceiverList contextReceiver = (KtContextReceiverList) node.getPsi();
-                return contextReceiver.contextReceivers();
-            }
-            node = node.getTreeNext();
-        }
-        return Collections.emptyList();
     }
 
     @Nullable

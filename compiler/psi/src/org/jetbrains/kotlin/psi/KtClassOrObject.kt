@@ -188,18 +188,7 @@ abstract class KtClassOrObject :
         return parts.joinToString(separator = ".")
     }
 
-    fun getContextReceiverList(): KtContextReceiverList? {
-        getStubOrPsiChild(KtStubElementTypes.CONTEXT_RECEIVER_LIST)?.let { return it }
-        var node = node.firstChildNode
-        while (node != null) {
-            val tt = node.elementType
-            if (tt === KtNodeTypes.CONTEXT_RECEIVER_LIST) {
-                return node.psi as KtContextReceiverList
-            }
-            node = node.treeNext
-        }
-        return null
-    }
+    fun getContextReceiverList(): KtContextReceiverList? = getStubOrPsiChild(KtStubElementTypes.CONTEXT_RECEIVER_LIST)
 
     override fun getContextReceivers(): List<KtContextReceiver> =
         getContextReceiverList()?.let { return it.contextReceivers() } ?: emptyList()
