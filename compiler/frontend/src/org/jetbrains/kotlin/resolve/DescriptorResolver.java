@@ -957,7 +957,7 @@ public class DescriptorResolver {
             }
         }
 
-        LinkedHashMap<ReceiverParameterDescriptor, String> receiverToLabelMap = new LinkedHashMap<>();
+        LabelNameToReceiverStorage nameToReceiverStorage = new LabelNameToReceiverStorage();
 
         KtTypeReference receiverTypeRef = variableDeclaration.getReceiverTypeReference();
         ReceiverParameterDescriptor receiverDescriptor = null;
@@ -967,13 +967,16 @@ public class DescriptorResolver {
             receiverDescriptor = DescriptorFactory.createExtensionReceiverParameterForCallable(
                     propertyDescriptor, receiverType, splitter.getAnnotationsForTarget(RECEIVER)
             );
-            receiverToLabelMap.put(receiverDescriptor, receiverTypeRef.nameForReceiverLabel());
+            String receiverName = receiverTypeRef.nameForReceiverLabel();
+            if (receiverName != null) {
+                nameToReceiverStorage.set(receiverName, receiverDescriptor);
+            }
         }
 
         List<KtContextReceiver> contextReceivers = variableDeclaration.getContextReceivers();
         List<ReceiverParameterDescriptor> contextReceiverDescriptors =
                 createReceiverDescriptorsForProperty(propertyDescriptor, scopeForDeclarationResolutionWithTypeParameters, trace,
-                                                     contextReceivers, receiverToLabelMap);
+                                                     contextReceivers, nameToReceiverStorage);
 
         LexicalScope scopeForInitializer = ScopeUtils.makeScopeForPropertyInitializer(scopeForInitializerResolutionWithTypeParameters, propertyDescriptor);
         KotlinType propertyType = propertyInfo.getVariableType();
@@ -1022,7 +1025,7 @@ public class DescriptorResolver {
                 new FieldDescriptorImpl(annotationSplitter.getAnnotationsForTarget(FIELD), propertyDescriptor),
                 new FieldDescriptorImpl(annotationSplitter.getAnnotationsForTarget(PROPERTY_DELEGATE_FIELD), propertyDescriptor)
         );
-        trace.record(DESCRIPTOR_TO_NAMED_RECEIVERS, propertyDescriptor, receiverToLabelMap);
+        trace.record(DESCRIPTOR_TO_NAMED_RECEIVERS, propertyDescriptor, nameToReceiverStorage);
         trace.record(BindingContext.VARIABLE, variableDeclaration, propertyDescriptor);
         return propertyDescriptor;
     }
@@ -1032,7 +1035,7 @@ public class DescriptorResolver {
             @NotNull LexicalScope scopeForResolution,
             @NotNull BindingTrace trace,
             @NotNull List<KtContextReceiver> contextReceivers,
-            @NotNull Map<ReceiverParameterDescriptor, String> receiverToLabelMap
+            @NotNull LabelNameToReceiverStorage labelNameToReceiverStorage
     ) {
         Map<KtContextReceiver, KotlinType> contextReceiversToTypes = new LinkedHashMap<>();
         for (KtContextReceiver contextReceiver: contextReceivers) {
@@ -1051,7 +1054,7 @@ public class DescriptorResolver {
             );
             String contextReceiverName = contextReceiver.name();
             if (contextReceiverName != null) {
-                receiverToLabelMap.put(receiverDescriptor, contextReceiverName);
+                labelNameToReceiverStorage.set(contextReceiverName, receiverDescriptor);
             }
             return receiverDescriptor;
         }).collect(Collectors.toList());

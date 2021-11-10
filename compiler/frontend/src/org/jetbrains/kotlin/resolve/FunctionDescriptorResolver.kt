@@ -242,20 +242,20 @@ class FunctionDescriptorResolver(
         }
 
         if (languageVersionSettings.supportsFeature(LanguageFeature.ContextReceivers)) {
-            val receiverToLabelMap = linkedMapOf<ReceiverParameterDescriptor, String>()
+            val labelNameToReceiverStorage = LabelNameToReceiverStorage()
             if (receiverTypeRef != null && extensionReceiver != null) {
                 receiverTypeRef.nameForReceiverLabel()?.let {
-                    receiverToLabelMap[extensionReceiver] = it
+                    labelNameToReceiverStorage[it] = extensionReceiver
                 }
             }
             contextReceiverDescriptors.zip(0 until contextReceivers.size).reversed()
                 .forEach { (contextReceiverDescriptor, i) ->
                     contextReceivers[i].name()?.let {
-                        receiverToLabelMap[contextReceiverDescriptor] = it
+                        labelNameToReceiverStorage[it] = contextReceiverDescriptor
                     }
                 }
 
-            trace.record(BindingContext.DESCRIPTOR_TO_NAMED_RECEIVERS, functionDescriptor, receiverToLabelMap)
+            trace.record(BindingContext.DESCRIPTOR_TO_NAMED_RECEIVERS, functionDescriptor, labelNameToReceiverStorage)
         }
 
         functionDescriptor.initialize(
