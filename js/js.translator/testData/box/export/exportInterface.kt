@@ -49,7 +49,7 @@ function box() {
     const notExported = generateNotExported(3)
 
     if (exported.foo() !== "Exported") return "Fail: foo function was not generated for ExportedClass"
-    if (another.foo() !== "Another one Exported") return "Fail: foo function was not generated for AnotherOne"
+    if (another.foo() !== "Another One Exported") return "Fail: foo function was not generated for AnotherOne"
     if (notExported.foo() !== "Not Exported") return "Fail: foo function was not generated for NotExportedClass"
 
     if (exported.value !== 1) return "Fail: value getter was not generated for ExportedClass"

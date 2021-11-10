@@ -143,8 +143,7 @@ class JsClassGenerator(private val irClass: IrClass, val context: JsGenerationCo
                 // so we need regenerate `defineProperty` with setter.
                 // P.S. If the overridden property is owned by an interface - we should generate defineProperty
                 // for overridden property in the first class which override those properties
-                val noAlreadyMaterializedOverriddenGetter = overriddenSymbols.isEmpty() ||
-                        overriddenSymbols.any { it.owner.parentClassOrNull.isExportedInterface() }
+                val hasOverriddenExportedInterfaceProperties = overriddenSymbols.any { it.owner.parentClassOrNull.isExportedInterface() }
                         && !overriddenSymbols.any { it.owner.parentClassOrNull.isExportedClass() }
 
                 val overriddenExportedGetter = !property.getter?.overriddenSymbols.isNullOrEmpty() &&
@@ -156,7 +155,8 @@ class JsClassGenerator(private val irClass: IrClass, val context: JsGenerationCo
                         property.isEnumFakeOverriddenDeclaration(context.staticContext.backendContext)
 
                 if (irClass.isExported(context.staticContext.backendContext) &&
-                    (noAlreadyMaterializedOverriddenGetter || needsOverride) ||
+                    (overriddenSymbols.isEmpty() || needsOverride) ||
+                    hasOverriddenExportedInterfaceProperties ||
                     property.getter?.overridesExternal() == true ||
                     property.getJsName() != null
                 ) {
