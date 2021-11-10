@@ -7,6 +7,7 @@ package org.jetbrains.kotlin.fir.resolve.calls
 
 import org.jetbrains.kotlin.fir.resolve.BodyResolveComponents
 import org.jetbrains.kotlin.fir.resolve.calls.tower.TowerGroup
+import org.jetbrains.kotlin.fir.symbols.impl.FirErrorClassLikeSymbol
 import org.jetbrains.kotlin.resolve.calls.tower.CandidateApplicability
 import org.jetbrains.kotlin.resolve.calls.tower.isSuccess
 import org.jetbrains.kotlin.resolve.calls.tower.shouldStopResolve
@@ -31,6 +32,10 @@ open class CandidateCollector(
     }
 
     open fun consumeCandidate(group: TowerGroup, candidate: Candidate, context: ResolutionContext): CandidateApplicability {
+        if (candidate.symbol is FirErrorClassLikeSymbol) {
+            return candidate.applicability
+        }
+
         val applicability = resolutionStageRunner.processCandidate(candidate, context)
 
         if (applicability > currentApplicability || (applicability == currentApplicability && group < bestGroup)) {
