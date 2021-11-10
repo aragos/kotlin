@@ -402,9 +402,9 @@ default: `indy-with-constants` for JVM target 9 or greater, `inline` otherwise""
 
     @Argument(
         value = "-Xrelease",
-        valueDescription = "Supported versions depend on used JDK",
+        valueDescription = "<version>",
         description = """
-            Compile against specified JDK API. Supported versions depend on used JDK. 
+            Compile against specified JDK API. Requires JDK 9 or newer. Supported versions depend on used JDK (For JDK 17 and below supported targets are 1.8, 9, 10 - 17). Also set `-jvm-target` value 
         """
     )
     var release: String? by NullableStringFreezableVar(null)

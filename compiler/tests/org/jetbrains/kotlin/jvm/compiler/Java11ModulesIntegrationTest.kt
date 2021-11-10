@@ -159,6 +159,13 @@ class Java11ModulesIntegrationTest : AbstractKotlinCompilerIntegrationTest() {
         module("moduleSwing", additionalKotlinArguments = listOf("-Xrelease=9"))
     }
 
+    fun testReleaseFlagConflict() {
+        // Test that although we have moduleA in the module path, it's not in the module graph
+        // because we did not provide -Xadd-modules=moduleA
+        module("module9", additionalKotlinArguments = listOf("-Xrelease=9", "-jvm-target=10"))
+        module("module11", additionalKotlinArguments = listOf("-Xrelease=11", "-jvm-target=10"))
+    }
+
     fun testNamedReadsTransitive() {
         val a = module("moduleA")
         val b = module("moduleB", listOf(a))
