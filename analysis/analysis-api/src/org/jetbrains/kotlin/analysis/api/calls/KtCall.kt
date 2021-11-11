@@ -8,10 +8,12 @@ package org.jetbrains.kotlin.analysis.api.calls
 import org.jetbrains.kotlin.analysis.api.ValidityTokenOwner
 import org.jetbrains.kotlin.analysis.api.diagnostics.KtDiagnostic
 import org.jetbrains.kotlin.analysis.api.symbols.KtFunctionLikeSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KtSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KtValueParameterSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KtVariableLikeSymbol
 import org.jetbrains.kotlin.analysis.api.tokens.ValidityToken
 import org.jetbrains.kotlin.analysis.api.types.KtSubstitutor
+import org.jetbrains.kotlin.analysis.api.types.KtType
 import org.jetbrains.kotlin.analysis.api.withValidityAssertion
 import org.jetbrains.kotlin.psi.KtExpression
 
@@ -23,7 +25,38 @@ public sealed class KtCall : ValidityTokenOwner {
     public abstract val argumentMapping: LinkedHashMap<KtExpression, KtValueParameterSymbol>
     public abstract val targetFunction: KtCallTarget
     public abstract val substitutor: KtSubstitutor
+    public abstract val dispatchReceiver: KtReceiverValue?
+    public abstract val extensionReceiver: KtReceiverValue?
 }
+
+
+public sealed class KtReceiverValue : ValidityTokenOwner
+
+public class KtExplicitReceiverValue(override val token: ValidityToken, public val expression: KtExpression) : KtReceiverValue()
+
+public class KtImplicitReceiverValue(override val token: ValidityToken, private val _boundSymbol: KtSymbol) : KtReceiverValue() {
+    public val boundSymbol: KtSymbol get() = withValidityAssertion { _boundSymbol }
+}
+
+public class KtSmartCastReceiverValue(public val original: KtReceiverValue, private val _smartCastType: KtType) : KtReceiverValue() {
+    override val token: ValidityToken
+        get() = original.token
+    public val smartCastType: KtType get() = withValidityAssertion { _smartCastType }
+}
+
+public val KtReceiverValue.boundSymbol: KtSymbol?
+    get() = when (this) {
+        is KtExplicitReceiverValue -> null
+        is KtImplicitReceiverValue -> boundSymbol
+        is KtSmartCastReceiverValue -> original.boundSymbol
+    }
+
+public val KtReceiverValue.expression: KtExpression?
+    get() = when (this) {
+        is KtExplicitReceiverValue -> expression
+        is KtImplicitReceiverValue -> null
+        is KtSmartCastReceiverValue -> original.expression
+    }
 
 /**
  * Call using `()` of some variable of functional type, e.g.,
@@ -37,6 +70,8 @@ public class KtFunctionalTypeVariableCall(
     private val _argumentMapping: LinkedHashMap<KtExpression, KtValueParameterSymbol>,
     private val _targetFunction: KtCallTarget,
     private val _substitutor: KtSubstitutor,
+    private val _dispatchReceiver: KtReceiverValue?,
+    private val _extensionReceiver: KtReceiverValue?,
     override val token: ValidityToken
 ) : KtCall() {
     public val target: KtVariableLikeSymbol get() = withValidityAssertion { _target }
@@ -47,6 +82,10 @@ public class KtFunctionalTypeVariableCall(
         get() = withValidityAssertion { _targetFunction }
     override val substitutor: KtSubstitutor
         get() = withValidityAssertion { _substitutor }
+    override val dispatchReceiver: KtReceiverValue?
+        get() = withValidityAssertion { _dispatchReceiver }
+    override val extensionReceiver: KtReceiverValue?
+        get() = withValidityAssertion { _extensionReceiver }
 }
 
 /**
@@ -71,6 +110,8 @@ public class KtVariableWithInvokeFunctionCall(
     private val _argumentMapping: LinkedHashMap<KtExpression, KtValueParameterSymbol>,
     private val _targetFunction: KtCallTarget,
     private val _substitutor: KtSubstitutor,
+    private val _dispatchReceiver: KtReceiverValue?,
+    private val _extensionReceiver: KtReceiverValue?,
     override val token: ValidityToken
 ) : KtDeclaredFunctionCall() {
     public val target: KtVariableLikeSymbol get() = withValidityAssertion { _target }
@@ -80,6 +121,10 @@ public class KtVariableWithInvokeFunctionCall(
         get() = withValidityAssertion { _targetFunction }
     override val substitutor: KtSubstitutor
         get() = withValidityAssertion { _substitutor }
+    override val dispatchReceiver: KtReceiverValue?
+        get() = withValidityAssertion { _dispatchReceiver }
+    override val extensionReceiver: KtReceiverValue?
+        get() = withValidityAssertion { _extensionReceiver }
 }
 
 /**
@@ -91,6 +136,8 @@ public class KtFunctionCall(
     private val _argumentMapping: LinkedHashMap<KtExpression, KtValueParameterSymbol>,
     private val _targetFunction: KtCallTarget,
     private val _substitutor: KtSubstitutor,
+    private val _dispatchReceiver: KtReceiverValue?,
+    private val _extensionReceiver: KtReceiverValue?,
     override val token: ValidityToken
 ) : KtDeclaredFunctionCall() {
     override val argumentMapping: LinkedHashMap<KtExpression, KtValueParameterSymbol>
@@ -99,6 +146,10 @@ public class KtFunctionCall(
         get() = withValidityAssertion { _targetFunction }
     override val substitutor: KtSubstitutor
         get() = withValidityAssertion { _substitutor }
+    override val dispatchReceiver: KtReceiverValue?
+        get() = withValidityAssertion { _dispatchReceiver }
+    override val extensionReceiver: KtReceiverValue?
+        get() = withValidityAssertion { _extensionReceiver }
 }
 
 /**
@@ -119,6 +170,10 @@ public class KtAnnotationCall(
 
     // Type parameter is allowed for an annotation class but not allowed as members. So substitutor is probably never useful.
     override val substitutor: KtSubstitutor = KtSubstitutor.Empty(token)
+    override val dispatchReceiver: KtReceiverValue?
+        get() = null
+    override val extensionReceiver: KtReceiverValue?
+        get() = null
 }
 // TODO: Add other properties, e.g., useSiteTarget
 
@@ -143,6 +198,10 @@ public class KtDelegatedConstructorCall(
 
     // A delegate constructor call never has any type argument.
     override val substitutor: KtSubstitutor = KtSubstitutor.Empty(token)
+    override val dispatchReceiver: KtReceiverValue?
+        get() = null
+    override val extensionReceiver: KtReceiverValue?
+        get() = null
 }
 
 public enum class KtDelegatedConstructorCallKind { SUPER_CALL, THIS_CALL }

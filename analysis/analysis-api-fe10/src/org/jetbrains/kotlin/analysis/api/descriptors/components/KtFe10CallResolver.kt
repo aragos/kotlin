@@ -85,7 +85,7 @@ internal class KtFe10CallResolver(override val analysisSession: KtFe10AnalysisSe
                     argumentMapping[setterValue] = setterParameterSymbol
                 }
 
-                return KtFunctionCall(argumentMapping, target, KtSubstitutor.Empty(token), token)
+                return KtFunctionCall(argumentMapping, target, KtSubstitutor.Empty(token), null, null, token)
             }
         }
 
@@ -139,9 +139,9 @@ internal class KtFe10CallResolver(override val analysisSession: KtFe10AnalysisSe
 
             val substitutor = KtSubstitutor.Empty(token)
             return if (resolvedCall.functionCall.resultingDescriptor.callableId in kotlinFunctionInvokeCallableIds) {
-                KtFunctionalTypeVariableCall(variableSymbol, argumentMapping, getTarget(callableSymbol), substitutor, token)
+                KtFunctionalTypeVariableCall(variableSymbol, argumentMapping, getTarget(callableSymbol), substitutor, null, null, token)
             } else {
-                KtVariableWithInvokeFunctionCall(variableSymbol, argumentMapping, getTarget(callableSymbol), substitutor, token)
+                KtVariableWithInvokeFunctionCall(variableSymbol, argumentMapping, getTarget(callableSymbol), substitutor, null, null, token)
             }
         }
 
@@ -155,7 +155,7 @@ internal class KtFe10CallResolver(override val analysisSession: KtFe10AnalysisSe
             }
         }
 
-        return KtFunctionCall(argumentMapping, getTarget(callableSymbol), KtSubstitutor.Empty(token), token)
+        return KtFunctionCall(argumentMapping, getTarget(callableSymbol), KtSubstitutor.Empty(token), null, null, token)
     }
 
     private fun getUnresolvedCall(call: KtElement): KtCall? {
