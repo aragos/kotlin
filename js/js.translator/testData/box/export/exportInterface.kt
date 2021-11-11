@@ -12,7 +12,7 @@ interface I {
     fun foo(): String
 }
 
-open class NotExportedClass(override val value: Int) : I {
+open class NotExportedClass(override var value: Int) : I {
     override var variable: Int = value
     override open fun foo(): String = "Not Exported"
 }
@@ -67,6 +67,9 @@ function box() {
     if (exported.variable !== 101) return "Fail: variable setter was not generated for ExportedClass"
     if (another.variable !== 102) return "Fail: variable setter was not generated for AnotherOne"
     if (notExported.variable !== 103) return "Fail: variable setter was not generated for NotExportedClass"
+
+    notExported.value = 42
+    if (notExported.value !== 3) return "Fail: value setter was generated for NotExportedClass, but it shouldn't"
 
     if (consume(exported) !== "Value is 1, variable is 101 and result is 'Exported'") return "Fail: methods or fields of ExportedClass was mangled"
     if (consume(another) !== "Value is 42, variable is 102 and result is 'Another One Exported'") return "Fail: methods or fields of AnotherOne was mangled"

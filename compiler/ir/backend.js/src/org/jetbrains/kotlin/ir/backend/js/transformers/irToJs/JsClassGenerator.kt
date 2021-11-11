@@ -6,6 +6,7 @@
 package org.jetbrains.kotlin.ir.backend.js.transformers.irToJs
 
 import org.jetbrains.kotlin.descriptors.DescriptorVisibilities
+import org.jetbrains.kotlin.descriptors.DescriptorVisibility
 import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.ir.backend.js.export.isEnumFakeOverriddenDeclaration
 import org.jetbrains.kotlin.ir.backend.js.export.isExported
@@ -125,14 +126,6 @@ class JsClassGenerator(private val irClass: IrClass, val context: JsGenerationCo
                         )
                     }
 
-                fun IrSimpleFunction.accessorRef(): JsNameRef? =
-                    when (visibility) {
-                        DescriptorVisibilities.PRIVATE -> null
-                        else -> JsNameRef(
-                            context.getNameForMemberFunction(this),
-                            classPrototypeRef
-                        )
-                    }
 
                 val overriddenSymbols = property.getter?.overriddenSymbols.orEmpty()
 
@@ -174,31 +167,24 @@ class JsClassGenerator(private val irClass: IrClass, val context: JsGenerationCo
                     //         set: Foo.prototype._set_prop__a4enbm_k$
                     //     });
 
-                    val getterForwarder = if (property.getter?.modality == Modality.FINAL) property.getter?.accessorRef()
-                    else {
-                        property.getter?.propertyAccessorForwarder("getter forwarder") { getterRef ->
-                            JsReturn(
-                                JsInvocation(
-                                    getterRef
-                                )
-                            )
+                    val getterForwarder = property.getter
+                        .takeIf { it != null && overriddenExportedGetter }
+                        .getOrGenerateIfFinal {
+                            propertyAccessorForwarder("getter forwarder") {
+                                JsReturn(JsInvocation(it))
+                            }
                         }
-                    }
 
-                    val setterForwarder = if (property.setter?.modality == Modality.FINAL) property.setter?.accessorRef()
-                    else {
-                        property.setter?.let {
+                    val setterForwarder = property.setter
+                        .takeIf { it != null && !noOverriddenExportedSetter }
+                        .getOrGenerateIfFinal {
                             val setterArgName = JsName("value", false)
-                            it.propertyAccessorForwarder("setter forwarder") { setterRef ->
-                                JsInvocation(
-                                    setterRef,
-                                    JsNameRef(setterArgName)
-                                ).makeStmt()
+                            propertyAccessorForwarder("setter forwarder") {
+                                JsInvocation(it, JsNameRef(setterArgName)).makeStmt()
                             }?.apply {
                                 parameters.add(JsParameter(setterArgName))
                             }
                         }
-                    }
 
                     classBlock.statements += JsExpressionStatement(
                         defineProperty(
@@ -214,6 +200,20 @@ class JsClassGenerator(private val irClass: IrClass, val context: JsGenerationCo
         context.staticContext.classModels[irClass.symbol] = classModel
         return classBlock
     }
+
+    private inline fun IrSimpleFunction?.getOrGenerateIfFinal(generateFunc: IrSimpleFunction.() -> JsFunction?): JsExpression? {
+        if (this == null) return null
+        return if (modality == Modality.FINAL) accessorRef() else generateFunc()
+    }
+
+    private fun IrSimpleFunction.accessorRef(): JsNameRef? =
+        when (visibility) {
+            DescriptorVisibilities.PRIVATE -> null
+            else -> JsNameRef(
+                context.getNameForMemberFunction(this),
+                classPrototypeRef
+            )
+        }
 
     private fun IrSimpleFunction.generateAssignmentIfMangled(memberRef: JsExpression) {
         if (
