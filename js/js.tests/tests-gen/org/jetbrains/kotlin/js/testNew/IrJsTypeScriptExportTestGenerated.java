@@ -92,11 +92,13 @@ public class IrJsTypeScriptExportTestGenerated extends AbstractIrJsTypeScriptExp
     @Nested
     @TestMetadata("js/js.translator/testData/typescript-export/implicit-export")
     @TestDataPath("$PROJECT_ROOT")
-    public static class Implicit_export extends AbstractIrJsTypeScriptExportTest {
+    public class Implicit_export {
+        @Test
         public void testAllFilesPresentInImplicit_export() throws Exception {
             KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("js/js.translator/testData/typescript-export/implicit-export"), Pattern.compile("^([^_](.+))\\.kt$"), null, TargetBackend.JS_IR, true);
         }
 
+        @Test
         @TestMetadata("declarations.kt")
         public void testDeclarations() throws Exception {
             runTest("js/js.translator/testData/typescript-export/implicit-export/declarations.kt");
