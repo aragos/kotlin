@@ -142,6 +142,8 @@ class JsClassGenerator(private val irClass: IrClass, val context: JsGenerationCo
                 val overriddenExportedGetter = !property.getter?.overriddenSymbols.isNullOrEmpty() &&
                         property.getter?.isOverriddenExported(context.staticContext.backendContext) == true
 
+                val getterOverridesExternal = property.getter?.overridesExternal() == true
+
                 val noOverriddenExportedSetter = property.setter?.isOverriddenExported(context.staticContext.backendContext) == false
 
                 val needsOverride = (overriddenExportedGetter && noOverriddenExportedSetter) ||
@@ -150,7 +152,7 @@ class JsClassGenerator(private val irClass: IrClass, val context: JsGenerationCo
                 if (irClass.isExported(context.staticContext.backendContext) &&
                     (overriddenSymbols.isEmpty() || needsOverride) ||
                     hasOverriddenExportedInterfaceProperties ||
-                    property.getter?.overridesExternal() == true ||
+                    getterOverridesExternal ||
                     property.getJsName() != null
                 ) {
 
@@ -168,7 +170,7 @@ class JsClassGenerator(private val irClass: IrClass, val context: JsGenerationCo
                     //     });
 
                     val getterForwarder = property.getter
-                        .takeIf { it != null && overriddenExportedGetter }
+                        .takeIf { it.shouldExportAccessor() }
                         .getOrGenerateIfFinal {
                             propertyAccessorForwarder("getter forwarder") {
                                 JsReturn(JsInvocation(it))
@@ -176,7 +178,7 @@ class JsClassGenerator(private val irClass: IrClass, val context: JsGenerationCo
                         }
 
                     val setterForwarder = property.setter
-                        .takeIf { it != null && !noOverriddenExportedSetter }
+                        .takeIf { it.shouldExportAccessor() }
                         .getOrGenerateIfFinal {
                             val setterArgName = JsName("value", false)
                             propertyAccessorForwarder("setter forwarder") {
@@ -204,6 +206,14 @@ class JsClassGenerator(private val irClass: IrClass, val context: JsGenerationCo
     private inline fun IrSimpleFunction?.getOrGenerateIfFinal(generateFunc: IrSimpleFunction.() -> JsFunction?): JsExpression? {
         if (this == null) return null
         return if (modality == Modality.FINAL) accessorRef() else generateFunc()
+    }
+
+    private fun IrSimpleFunction?.shouldExportAccessor(): Boolean {
+        if (this == null) return false
+        return isExported(context.staticContext.backendContext) ||
+                overridesExternal() ||
+                isOverriddenExported(context.staticContext.backendContext)
+
     }
 
     private fun IrSimpleFunction.accessorRef(): JsNameRef? =
