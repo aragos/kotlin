@@ -93,10 +93,6 @@ public class IrJsTypeScriptExportTestGenerated extends AbstractIrJsTypeScriptExp
     @TestMetadata("js/js.translator/testData/typescript-export/implicit-export")
     @TestDataPath("$PROJECT_ROOT")
     public static class Implicit_export extends AbstractIrJsTypeScriptExportTest {
-        private void runTest(String testDataFilePath) throws Exception {
-            KotlinTestUtils.runTest0(this::doTest, TargetBackend.JS_IR, testDataFilePath);
-        }
-
         public void testAllFilesPresentInImplicit_export() throws Exception {
             KtTestUtil.assertAllTestsPresentByMetadataWithExcluded(this.getClass(), new File("js/js.translator/testData/typescript-export/implicit-export"), Pattern.compile("^([^_](.+))\\.kt$"), null, TargetBackend.JS_IR, true);
         }
