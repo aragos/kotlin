@@ -30,7 +30,6 @@ class Java11ModulesIntegrationTest : AbstractKotlinCompilerIntegrationTest() {
 
         val kotlinOptions = mutableListOf(
             "-jdk-home", KtTestUtil.getJdk11Home().path,
-            "-jvm-target", "1.8",
             "-Xmodule-path=$paths"
         )
         if (addModules.isNotEmpty()) {
@@ -148,15 +147,16 @@ class Java11ModulesIntegrationTest : AbstractKotlinCompilerIntegrationTest() {
         // Test that although we have moduleA in the module path, it's not in the module graph
         // because we did not provide -Xadd-modules=moduleA
         module("module5", additionalKotlinArguments = listOf("-Xrelease=5"))
-        module("module12", additionalKotlinArguments = listOf("-Xrelease=12"))
+        module("module12", additionalKotlinArguments = listOf("-Xrelease=12", "-jvm-target=12"))
     }
 
     fun testReleaseFlag() {
         // Test that although we have moduleA in the module path, it's not in the module graph
         // because we did not provide -Xadd-modules=moduleA
         module("module")
-        module("module11", additionalKotlinArguments = listOf("-Xrelease=11"))
-        module("moduleSwing", additionalKotlinArguments = listOf("-Xrelease=9"))
+        //TODO:  -jvm-target is set explicitly to 1.8 in K2JvmCompilerArguments :(
+        module("module11", additionalKotlinArguments = listOf("-Xrelease=11", "-jvm-target=11"))
+        module("moduleSwing", additionalKotlinArguments = listOf("-Xrelease=9", "-jvm-target=9"))
     }
 
     fun testReleaseFlagConflict() {
