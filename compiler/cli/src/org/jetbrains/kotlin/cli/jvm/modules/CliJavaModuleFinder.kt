@@ -119,8 +119,33 @@ class CliJavaModuleFinder(
             moduleInfo,
             when {
                 useLastJdkApi -> listOf(JavaModule.Root(moduleRoot, isBinary = true, isBinarySignature = useSig))
-                //TODO: distinguish roots from different modules under JDK 10-11
-                useSig -> listFoldersForRelease().map { JavaModule.Root(it, isBinary = true, isBinarySignature = true) }
+                useSig -> {
+                    val packageParts =
+                        if (isCompilationJDK12OrLater) emptyMap()
+                        else hashMapOf<String, Boolean>().also { parts ->
+                            moduleInfo.exports.forEach {
+                                it.packageFqName.pathSegments().fold("") { acc, v ->
+                                    val packagePart = if (acc.isEmpty()) v.asString() else "$acc.${v.asString()}"
+                                    parts[packagePart] = false
+                                    packagePart
+                                }
+                            }
+                            //Do it separately to avoid reset to false
+                            moduleInfo.exports.forEach {
+                                parts[it.packageFqName.asString()] = true
+                            }
+                        }
+
+
+                    listFoldersForRelease().map { virtualFile ->
+                        JavaModule.Root(
+                            if (isCompilationJDK12OrLater) virtualFile
+                            else ModuleVirtualFileForRootPart(virtualFile.parent, virtualFile, packageParts, ""),
+                            isBinary = true,
+                            isBinarySignature = true
+                        )
+                    }
+                }
                 else -> error("Can't find ${moduleRoot.path} module")
             },
             file, true
