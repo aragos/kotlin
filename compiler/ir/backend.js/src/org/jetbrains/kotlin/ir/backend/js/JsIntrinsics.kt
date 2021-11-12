@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.ir.types.isLong
 import org.jetbrains.kotlin.ir.util.constructors
 import org.jetbrains.kotlin.ir.util.findDeclaration
 import org.jetbrains.kotlin.ir.util.kotlinPackageFqn
+import org.jetbrains.kotlin.ir.util.singleNonPrivateConstructor
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi2ir.findSingleFunction
@@ -195,7 +196,7 @@ class JsIntrinsics(private val irBuiltIns: IrBuiltIns, val context: JsIrBackendC
     }!!
 
     val charClassSymbol = getInternalClassWithoutPackage("kotlin.Char")
-    val charConstructor = charClassSymbol.constructors.single().owner
+    val charConstructor = charClassSymbol.singleNonPrivateConstructor
 
     val stringClassSymbol = getInternalClassWithoutPackage("kotlin.String")
     val stringConstructorSymbol = stringClassSymbol.constructors.single()

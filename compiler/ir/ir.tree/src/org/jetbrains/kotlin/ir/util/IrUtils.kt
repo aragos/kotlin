@@ -188,6 +188,9 @@ val IrClass.constructors: Sequence<IrConstructor>
 val IrClassSymbol.constructors: Sequence<IrConstructorSymbol>
     get() = owner.constructors.map { it.symbol }
 
+val IrClassSymbol.singleNonPrivateConstructor: IrConstructorSymbol
+    get() = constructors.single { it.owner.visibility != DescriptorVisibilities.PRIVATE }
+
 val IrClass.fields: Sequence<IrField>
     get() = declarations.asSequence().filterIsInstance<IrField>()
 
