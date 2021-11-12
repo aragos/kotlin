@@ -22,12 +22,14 @@ import org.jetbrains.kotlin.analysis.api.symbols.nameOrAnonymous
 import org.jetbrains.kotlin.analysis.api.tokens.ValidityToken
 import org.jetbrains.kotlin.analysis.api.types.KtType
 import org.jetbrains.kotlin.analysis.api.types.KtTypeNullability
+import org.jetbrains.kotlin.analysis.api.types.KtTypeParameterType
 import org.jetbrains.kotlin.analysis.api.withValidityAssertion
 import org.jetbrains.kotlin.config.LanguageFeature
 import org.jetbrains.kotlin.descriptors.*
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtDoubleColonExpression
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtTypeParameter
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorUtils
@@ -37,7 +39,6 @@ import org.jetbrains.kotlin.types.*
 import org.jetbrains.kotlin.types.checker.NewCapturedType
 import org.jetbrains.kotlin.types.checker.NewTypeVariableConstructor
 import org.jetbrains.kotlin.types.typeUtil.isNothing
-import org.jetbrains.kotlin.types.typeUtil.supertypes
 import org.jetbrains.kotlin.util.containingNonLocalDeclaration
 
 internal class KtFe10TypeProvider(override val analysisSession: KtFe10AnalysisSession) : KtTypeProvider() {
@@ -76,6 +77,15 @@ internal class KtFe10TypeProvider(override val analysisSession: KtFe10AnalysisSe
         val kotlinType = bindingContext[BindingContext.TYPE, ktTypeReference]
             ?: ErrorUtils.createErrorType("Cannot resolve type reference ${ktTypeReference.text}")
         return kotlinType.toKtType(analysisSession)
+    }
+
+    override fun getKtType(ktTypeParameter: KtTypeParameter): KtTypeParameterType = withValidityAssertion {
+        val bindingContext = analysisSession.analyze(ktTypeParameter, AnalysisMode.PARTIAL)
+        val descriptor = bindingContext[BindingContext.TYPE_PARAMETER, ktTypeParameter]
+            ?: ErrorUtils.createErrorType("Cannot get descriptor for type parameter ${ktTypeParameter.text}")
+        val kotlinType = (descriptor as? TypeParameterDescriptor)?.defaultType
+            ?: ErrorUtils.createErrorType("Cannot get default type for type parameter ${ktTypeParameter.text}")
+        return kotlinType.toKtType(analysisSession) as KtTypeParameterType
     }
 
     override fun getReceiverTypeForDoubleColonExpression(expression: KtDoubleColonExpression): KtType? = withValidityAssertion {

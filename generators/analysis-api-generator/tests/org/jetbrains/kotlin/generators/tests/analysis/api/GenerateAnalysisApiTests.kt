@@ -113,6 +113,10 @@ fun main(args: Array<String>) {
                 model("components/smartCastInfo")
             }
 
+            testClass<AbstractFirTypeParameterTypeTest> {
+                model("components/typeParameter")
+            }
+
             testClass<AbstractFirWhenMissingCasesTest> {
                 model("components/whenMissingCases")
             }
@@ -177,6 +181,10 @@ fun main(args: Array<String>) {
 
             testClass<AbstractKtFe10HLSmartCastInfoTest> {
                 model("components/smartCastInfo")
+            }
+
+            testClass<AbstractKtFe10TypeParameterTypeTest> {
+                model("components/typeParameter")
             }
 
             testClass<AbstractKtFe10WhenMissingCasesTest> {

@@ -10,8 +10,10 @@ import org.jetbrains.kotlin.analysis.api.symbols.KtNamedClassOrObjectSymbol
 import org.jetbrains.kotlin.analysis.api.types.KtFlexibleType
 import org.jetbrains.kotlin.analysis.api.types.KtType
 import org.jetbrains.kotlin.analysis.api.types.KtTypeNullability
+import org.jetbrains.kotlin.analysis.api.types.KtTypeParameterType
 import org.jetbrains.kotlin.psi.KtDoubleColonExpression
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtTypeParameter
 import org.jetbrains.kotlin.psi.KtTypeReference
 
 public abstract class KtTypeProvider : KtAnalysisSessionComponent() {
@@ -24,6 +26,8 @@ public abstract class KtTypeProvider : KtAnalysisSessionComponent() {
     public abstract fun commonSuperType(types: Collection<KtType>): KtType?
 
     public abstract fun getKtType(ktTypeReference: KtTypeReference): KtType
+
+    public abstract fun getKtType(ktTypeParameter: KtTypeParameter): KtTypeParameterType
 
     public abstract fun getReceiverTypeForDoubleColonExpression(expression: KtDoubleColonExpression): KtType?
 
@@ -71,6 +75,12 @@ public interface KtTypeProviderMixIn : KtAnalysisSessionMixIn {
      * This may raise an exception if the resolution ends up with an unexpected kind.
      */
     public fun KtTypeReference.getKtType(): KtType =
+        analysisSession.typeProvider.getKtType(this)
+
+    /**
+     * Returns [KtTypeParameterType] for the given [KtTypeParameter].
+     */
+    public fun KtTypeParameter.getKtType(): KtTypeParameterType =
         analysisSession.typeProvider.getKtType(this)
 
     /**

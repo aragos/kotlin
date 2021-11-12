@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KtNamedClassOrObjectSymbol
 import org.jetbrains.kotlin.analysis.api.tokens.ValidityToken
 import org.jetbrains.kotlin.analysis.api.types.KtType
 import org.jetbrains.kotlin.analysis.api.types.KtTypeNullability
+import org.jetbrains.kotlin.analysis.api.types.KtTypeParameterType
 import org.jetbrains.kotlin.analysis.api.withValidityAssertion
 import org.jetbrains.kotlin.analysis.low.level.api.fir.api.LowLevelFirApiFacadeForResolveOnAir.getTowerContextProvider
 import org.jetbrains.kotlin.analysis.low.level.api.fir.api.getOrBuildFir
@@ -26,6 +27,7 @@ import org.jetbrains.kotlin.fir.analysis.checkers.ConeTypeCompatibilityChecker.i
 import org.jetbrains.kotlin.fir.analysis.checkers.fullyExpandedClass
 import org.jetbrains.kotlin.fir.analysis.checkers.typeParameterSymbols
 import org.jetbrains.kotlin.fir.declarations.FirResolvePhase
+import org.jetbrains.kotlin.fir.declarations.FirTypeParameter
 import org.jetbrains.kotlin.fir.declarations.utils.superConeTypes
 import org.jetbrains.kotlin.fir.expressions.FirCallableReferenceAccess
 import org.jetbrains.kotlin.fir.expressions.FirDelegatedConstructorCall
@@ -33,6 +35,7 @@ import org.jetbrains.kotlin.fir.expressions.FirGetClassCall
 import org.jetbrains.kotlin.fir.render
 import org.jetbrains.kotlin.fir.resolve.substitution.substitutorByMap
 import org.jetbrains.kotlin.fir.resolve.toSymbol
+import org.jetbrains.kotlin.fir.scopes.impl.toConeType
 import org.jetbrains.kotlin.fir.symbols.impl.FirAnonymousObjectSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirRegularClassSymbol
 import org.jetbrains.kotlin.fir.symbols.impl.FirTypeAliasSymbol
@@ -43,6 +46,7 @@ import org.jetbrains.kotlin.fir.types.impl.ConeTypeParameterTypeImpl
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtDoubleColonExpression
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtTypeParameter
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.types.TypeApproximatorConfiguration
 import org.jetbrains.kotlin.types.model.CaptureStatus
@@ -89,6 +93,13 @@ internal class KtFirTypeProvider(
             is FirResolvedTypeRef -> fir.coneType.asKtType()
             is FirDelegatedConstructorCall -> fir.constructedTypeRef.coneType.asKtType()
             else -> throwUnexpectedFirElementError(fir, ktTypeReference)
+        }
+    }
+
+    override fun getKtType(ktTypeParameter: KtTypeParameter): KtTypeParameterType = withValidityAssertion {
+        when (val fir = ktTypeParameter.getOrBuildFir(firResolveState)) {
+            is FirTypeParameter -> fir.toConeType().asKtType() as KtTypeParameterType
+            else -> throwUnexpectedFirElementError(fir, ktTypeParameter)
         }
     }
 
