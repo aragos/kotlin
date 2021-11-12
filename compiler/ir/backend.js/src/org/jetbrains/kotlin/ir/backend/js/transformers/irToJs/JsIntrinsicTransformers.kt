@@ -5,21 +5,23 @@
 
 package org.jetbrains.kotlin.ir.backend.js.transformers.irToJs
 
+import org.jetbrains.kotlin.backend.common.compilationException
 import org.jetbrains.kotlin.ir.backend.js.JsIrBackendContext
-import org.jetbrains.kotlin.ir.backend.js.utils.*
+import org.jetbrains.kotlin.ir.backend.js.utils.JsGenerationContext
+import org.jetbrains.kotlin.ir.backend.js.utils.Namer
 import org.jetbrains.kotlin.ir.backend.js.utils.getClassRef
+import org.jetbrains.kotlin.ir.backend.js.utils.invokeFunForLambda
 import org.jetbrains.kotlin.ir.declarations.IrClass
 import org.jetbrains.kotlin.ir.declarations.IrConstructor
 import org.jetbrains.kotlin.ir.declarations.IrSimpleFunction
-import org.jetbrains.kotlin.ir.expressions.*
+import org.jetbrains.kotlin.ir.expressions.IrCall
+import org.jetbrains.kotlin.ir.expressions.IrFunctionReference
 import org.jetbrains.kotlin.ir.symbols.IrSimpleFunctionSymbol
 import org.jetbrains.kotlin.ir.symbols.IrSymbol
 import org.jetbrains.kotlin.ir.types.classifierOrFail
-import org.jetbrains.kotlin.ir.types.getClass
 import org.jetbrains.kotlin.ir.util.getInlineClassBackingField
 import org.jetbrains.kotlin.ir.util.render
 import org.jetbrains.kotlin.js.backend.ast.*
-import java.lang.IllegalArgumentException
 
 typealias IrCallTransformer = (IrCall, context: JsGenerationContext) -> JsExpression
 
@@ -94,7 +96,11 @@ class JsIntrinsicTransformers(backendContext: JsIrBackendContext) {
             add(intrinsics.jsClass) { call, context ->
                 val typeArgument = call.getTypeArgument(0)
                 typeArgument?.getClassRef(context)
-                    ?: error("Type argument of jsClass must be statically known class, but " + typeArgument?.render())
+                    ?: compilationException(
+                        "Type argument of jsClass must be statically known class",
+                        typeArgument,
+                        context.currentFile
+                    )
             }
 
             add(intrinsics.jsNewTarget) { _, _ ->
@@ -119,7 +125,13 @@ class JsIntrinsicTransformers(backendContext: JsIrBackendContext) {
                 typeArgument.getClassRef(context)
             }
 
-            addIfNotNull(intrinsics.jsCode) { _, _ -> error("Should not be called") }
+            addIfNotNull(intrinsics.jsCode) { call, context ->
+                compilationException(
+                    "Should not be called",
+                    call,
+                    context.currentFile
+                )
+            }
 
             add(intrinsics.jsArrayLength) { call, context ->
                 val args = translateCallArguments(call, context)
