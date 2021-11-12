@@ -1,0 +1,7 @@
+include 'lib', 'main'
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}

@@ -55,7 +55,7 @@ object LookupSymbolKeyDescriptor : KeyDescriptor<LookupSymbolKey> {
         }
     }
 
-    private val storeFullFqName = CompilerSystemProperties.COMPILE_INCREMENTAL_WITH_CLASSPATH_SNAPSHOTS.value.toBooleanLenient() ?: false
+    private val storeFullFqName = CompilerSystemProperties.COMPILE_INCREMENTAL_WITH_ABI_SNAPSHOTS.value.toBooleanLenient() ?: false
 
     override fun save(output: DataOutput, value: LookupSymbolKey) {
         if (storeFullFqName) {

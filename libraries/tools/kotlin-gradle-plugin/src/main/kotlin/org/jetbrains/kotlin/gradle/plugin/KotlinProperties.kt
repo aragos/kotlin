@@ -119,6 +119,9 @@ internal class PropertiesProvider private constructor(private val project: Proje
             return gradleProperty || systemProperty
         }
 
+    val useAbiSnapshot: Boolean
+        get() = CompilerSystemProperties.COMPILE_INCREMENTAL_WITH_ABI_SNAPSHOTS.value.toBooleanLenient() ?: false
+
     val useFir: Boolean?
         get() = booleanProperty("kotlin.useFir")
 

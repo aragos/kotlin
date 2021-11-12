@@ -53,6 +53,7 @@ import org.jetbrains.kotlin.gradle.plugin.statistics.KotlinBuildStatsService
 import org.jetbrains.kotlin.gradle.report.BuildMetricsReporterService
 import org.jetbrains.kotlin.gradle.report.ReportingSettings
 import org.jetbrains.kotlin.gradle.targets.js.ir.isProduceUnzippedKlib
+import org.jetbrains.kotlin.gradle.tasks.internal.JavaTransform
 import org.jetbrains.kotlin.gradle.utils.*
 import org.jetbrains.kotlin.incremental.ChangedFiles
 import org.jetbrains.kotlin.incremental.ClasspathChanges
@@ -509,6 +510,10 @@ abstract class KotlinCompile @Inject constructor(
             private const val DIRECTORY_ARTIFACT_TYPE = "directory"
             private const val JAR_ARTIFACT_TYPE = "jar"
             const val CLASSPATH_ENTRY_SNAPSHOT_ARTIFACT_TYPE = "classpath-entry-snapshot"
+            //transformation for java jar
+            private const val JAR_SNAPSHOT_ARTIFACT_TYPE = "jar-snapshot"
+            //transformation for module jar. It should exist
+            private const val ABI_SNAPSHOT_ARTIFACT_TYPE = "snapshot"
         }
 
         /**
@@ -519,6 +524,16 @@ abstract class KotlinCompile @Inject constructor(
         fun runAtConfigurationTime(taskProvider: TaskProvider<T>, project: Project) {
             if (properties.useClasspathSnapshot) {
                 registerTransformsOnce(project)
+                project.configurations.create(classpathSnapshotConfigurationName(taskProvider.name)).apply {
+                    project.dependencies.add(name, project.files(project.provider { taskProvider.get().classpath }))
+                }
+            }
+
+            if (properties.useAbiSnapshot) {
+                project.dependencies.registerTransform(JavaTransform::class.java) {
+                    it.from.attribute(ARTIFACT_TYPE_ATTRIBUTE, JAR_ARTIFACT_TYPE)
+                    it.to.attribute(ARTIFACT_TYPE_ATTRIBUTE, JAR_ARTIFACT_TYPE)
+                }
                 project.configurations.create(classpathSnapshotConfigurationName(taskProvider.name)).apply {
                     project.dependencies.add(name, project.files(project.provider { taskProvider.get().classpath }))
                 }

@@ -51,7 +51,6 @@ class JavaUpToDateIT : KGPBaseTest() {
                     ":compileTestJava"
                 )
             }
-
             kotlinSourcesDir().resolve("foo/MainKotlinClass.kt").modify { "\n$it" }
 
             build("build") {
@@ -84,6 +83,52 @@ class JavaUpToDateIT : KGPBaseTest() {
             build("build") {
                 // see https://github.com/gradle/gradle/issues/5013
                 assertTasksExecuted(":compileKotlin", ":compileJava", ":compileTestKotlin", ":compileTestJava")
+            }
+        }
+    }
+
+    @DisplayName("On Kotlin method body change")
+    @GradleTest
+    fun testJavaMethodBodyIsChanged(gradleVersion: GradleVersion) {
+        val buildOptions = defaultBuildOptions.copy(abiSnapshot = true)
+        project("javaModuleTestProject", gradleVersion, buildOptions) {
+            build("build") {
+                assertTasksExecuted(
+                    ":compileKotlin",
+                    ":compileJava"
+                )
+            }
+
+            projectPath.resolve("lib/src/main/java/Main.java").modify {
+                it.replace("return \"new String\";", "return \"new String value\";")
+            }
+
+            build("build") {
+                assertTasksUpToDate(":compileJava", ":compileKotlin")
+            }
+        }
+    }
+
+    @DisplayName("On Kotlin method body change")
+    @GradleTest
+    fun testJarDependencyIsChanged(gradleVersion: GradleVersion) {
+        val buildOptions = defaultBuildOptions.copy(abiSnapshot = true)
+        project("javaModuleTestProject", gradleVersion, buildOptions = buildOptions) {
+            build("build") {
+                assertTasksExecuted(
+                    ":compileKotlin",
+                    ":compileJava"
+                )
+            }
+
+            projectPath.resolve("main/src/build.gradle").modify {
+                it.replace("9.2", "9.0")
+            }
+
+
+            build("build") {
+                assertTasksUpToDate(":compileJava")
+                assertIncrementalCompilation()
             }
         }
     }

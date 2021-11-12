@@ -26,6 +26,7 @@ data class BuildOptions(
     val kaptOptions: KaptOptions? = null,
     val androidVersion: String? = null,
     val jsOptions: JsOptions? = null,
+    val abiSnapshot: Boolean = false,
 ) {
     data class KaptOptions(
         val verbose: Boolean = false,
@@ -108,6 +109,10 @@ data class BuildOptions(
 
         if (androidVersion != null) {
             arguments.add("-Pandroid_tools_version=${androidVersion}")
+        }
+
+        if (options.abiSnapshot) {
+            add("-Dkotlin.incremental.classpath.snapshot.enabled=true")
         }
 
         return arguments.toList()
