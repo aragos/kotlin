@@ -3,7 +3,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: test/MyClass.funWithOuterAndOwnGenericsAndBounds
-  dispatchType: test/MyClass
   hasStableParameterNames: true
   isExtension: false
   isExternal: false
@@ -34,7 +33,6 @@ KtKotlinPropertySymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: test/MyClass.propWithOuterAndOwnGenericsAndBounds
-  dispatchType: test/MyClass
   getter: null
   hasBackingField: false
   hasGetter: false
@@ -66,7 +64,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: kotlin/Any.equals
-  dispatchType: kotlin/Any
   hasStableParameterNames: true
   isExtension: false
   isExternal: false
@@ -93,7 +90,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: kotlin/Any.hashCode
-  dispatchType: kotlin/Any
   hasStableParameterNames: true
   isExtension: false
   isExternal: false
@@ -118,7 +114,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: kotlin/Any.toString
-  dispatchType: kotlin/Any
   hasStableParameterNames: true
   isExtension: false
   isExternal: false
@@ -144,7 +139,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: test/MyClass
-  dispatchType: null
   hasStableParameterNames: true
   isExtension: false
   isPrimary: true

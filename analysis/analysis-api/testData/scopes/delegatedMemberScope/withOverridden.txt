@@ -3,7 +3,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: /I2.bar
-  dispatchType: B
   hasStableParameterNames: true
   isExtension: false
   isExternal: false

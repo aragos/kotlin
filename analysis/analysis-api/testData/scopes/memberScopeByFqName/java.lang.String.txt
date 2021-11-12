@@ -31,7 +31,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.hash32
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -70,7 +69,6 @@ KtSyntheticJavaPropertySymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.length
-  dispatchType: java/lang/String
   getter: KtPropertyGetterSymbol(<getter>)
   hasBackingField: true
   hasGetter: true
@@ -102,7 +100,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.isEmpty
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -127,7 +124,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.codePointAt
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -154,7 +150,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.codePointBefore
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -181,7 +176,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.codePointCount
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -209,7 +203,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.offsetByCodePoints
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -237,7 +230,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.getChars
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -265,7 +257,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.getChars
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -300,7 +291,6 @@ KtFunctionSymbol:
       psi: null
   ]
   callableIdIfNonLocal: java/lang/String.getBytes
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -330,7 +320,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.getBytes
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -357,7 +346,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.getBytes
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -384,7 +372,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.getBytes
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -409,7 +396,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.equals
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -436,7 +422,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.contentEquals
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -463,7 +448,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.contentEquals
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -490,7 +474,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.equalsIgnoreCase
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -517,7 +500,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.compareTo
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -544,7 +526,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.compareToIgnoreCase
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -571,7 +552,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.regionMatches
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -601,7 +581,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.regionMatches
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -632,7 +611,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.startsWith
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -660,7 +638,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.startsWith
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -687,7 +664,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.endsWith
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -714,7 +690,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.hashCode
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -739,7 +714,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.indexOf
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -766,7 +740,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.indexOf
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -794,7 +767,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.indexOf
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -821,7 +793,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.indexOf
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -849,7 +820,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.indexOfSupplementary
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -877,7 +847,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.lastIndexOf
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -904,7 +873,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.lastIndexOf
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -932,7 +900,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.lastIndexOf
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -959,7 +926,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.lastIndexOf
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -987,7 +953,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.lastIndexOfSupplementary
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1015,7 +980,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.substring
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1042,7 +1006,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.substring
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1070,7 +1033,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.subSequence
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1098,7 +1060,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.concat
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1125,7 +1086,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.replace
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1153,7 +1113,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.replace
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1181,7 +1140,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.matches
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1208,7 +1166,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.contains
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1235,7 +1192,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.replaceFirst
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1263,7 +1219,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.replaceAll
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1291,7 +1246,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.split
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1319,7 +1273,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.split
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1346,7 +1299,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.toLowerCase
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1373,7 +1325,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.toLowerCase
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1398,7 +1349,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.toUpperCase
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1425,7 +1375,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.toUpperCase
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1450,7 +1399,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.trim
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1475,7 +1423,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.toString
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1500,7 +1447,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.toCharArray
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1525,7 +1471,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.intern
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1550,7 +1495,6 @@ KtFunctionSymbol:
   annotationClassIds: []
   annotations: []
   callableIdIfNonLocal: java/lang/String.get
-  dispatchType: java/lang/String
   hasStableParameterNames: false
   isExtension: false
   isExternal: false
@@ -1602,7 +1546,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1620,7 +1563,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1640,7 +1582,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1660,7 +1601,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1682,7 +1622,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1709,7 +1648,6 @@ KtConstructorSymbol:
   ]
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1737,7 +1675,6 @@ KtConstructorSymbol:
   ]
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1758,7 +1695,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1781,7 +1717,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1804,7 +1739,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1825,7 +1759,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1846,7 +1779,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1868,7 +1800,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1888,7 +1819,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1908,7 +1838,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1928,7 +1857,6 @@ KtConstructorSymbol:
   annotations: []
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
@@ -1954,7 +1882,6 @@ KtConstructorSymbol:
   ]
   callableIdIfNonLocal: null
   containingClassIdIfNonLocal: java/lang/String
-  dispatchType: null
   hasStableParameterNames: false
   isExtension: false
   isPrimary: false
